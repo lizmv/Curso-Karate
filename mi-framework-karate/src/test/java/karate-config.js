@@ -27,10 +27,19 @@ function fn() {
   // Descomenta estas lineas cuando llegues a callSingle (ver common/auth.feature).
   // En la sesion 1 el login va en el Background de cada feature.
   //
-  // if (!config.user || !config.pass) karate.fail('Faltan NOVUS_USER y NOVUS_PASS');
-  // var auth = karate.callSingle('classpath:common/auth.feature', config);
-  // karate.configure('headers', { Authorization: 'Bearer ' + auth.token });
+  if (!config.user || !config.pass) karate.fail('Faltan NOVUS_USER y NOVUS_PASS');
+  var auth = karate.callSingle('classpath:common/auth.feature', config);
+  karate.configure('headers', { Authorization: 'Bearer ' + auth.token });
   // ---------------------------------------------------------------------------
+  karate.configure( 'logging', {
+      report: 'debug',
+      console: 'info',
+      pretty: true,
+      mask: {
+      headers: [ 'Authorization' , 'Cookie'],
+      jsonPaths: [ '$.password' , '$..token' ]
+      }
+      });
 
   return config;
 }
